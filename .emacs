@@ -240,3 +240,5 @@
 
 ;; Line numbering
 (global-linum-mode 1)
+;; And line number formatting:
+(setq linum-format "%d ")
