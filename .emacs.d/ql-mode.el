@@ -14,6 +14,13 @@
   '(("" . 'font-lock-operator)     ;; '=' is an operator
     ("OPEN" | "MC" | "JSEMU" . 'font-lock-builtin))     ;; ';' is a a built-in 
   '("\\.ql$")                      ;; files for which to activate this mode 
-   nil                              ;; other functions to call
+	nil
   "A mode for QL-files"            ;; doc string for this mode
 )
+
+;; Indent settings
+(defun ql-indent-setup()
+	(setq indent-tabs-mode nil))
+
+;: Hook the indent in the mode
+(add-hook 'ql-mode-hook 'ql-indent-setup)

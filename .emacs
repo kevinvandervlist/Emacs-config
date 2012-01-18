@@ -16,13 +16,15 @@
 (require 'zenburn)
 ;; PHP-mode from ~/.emacs.d
 (require 'php-mode)
+;; QL Mode
+(load-file "~/.emacs.d/ql-mode.el")
 ;; Rainbow mode
 (require 'rainbow-mode)
 ;; Programmers dvorak
 (load-file "~/.emacs.d/programmer-dvorak.el")
 ;; org-mode
 (require 'org-install)
-;; Coffee-mode
+;; Coffee mode https://github.com/defunkt/coffee-mode
 (require 'coffee-mode)
 
 (custom-set-variables
@@ -171,7 +173,7 @@
 (global-set-key (kbd "S-C-<up>") 'enlarge-window)
 
 ;; Default tab width. per-buffer: M-x set-variable RET c-basic-offset RET x RET
-(setq default-tab-width 4)
+(setq default-tab-width 2)
 
 ;; Ctrl needs to be at tab location
 ;; Windows: Registry fix. Lame
@@ -192,6 +194,8 @@
 ;; And kill-region to C-x-C-k
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
+;; Disable tab indenting
+(setq indent-tabs-mode nil)
 
 ;; isearch-forward and isearch-backward are great, but isearch-{forward,backward}-regexp is usefull to.
 (global-set-key "\M-s" 'isearch-forward-regexp)
