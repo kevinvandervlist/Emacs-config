@@ -237,3 +237,6 @@
   (cons msg code))
 ;; Specify my function (maybe I should have done a lambda function)
 (setq compilation-exit-message-function 'compilation-exit-autoclose)
+
+;; Line numbering
+(global-linum-mode 1)
