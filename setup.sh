@@ -13,11 +13,11 @@ TMPDIR=$(mktemp -d)
 mkdir -p ${DEST}
 
 if [ -f "${DEST}/.emacs" ]; then
-	cp -r ${DEST}/.emacs.d ${TMPDIR}/.emacs
+	mv ${DEST}/.emacs ${TMPDIR}/.
 fi
 
 if [ -d "${DEST}/.emacs.d" ]; then
-	cp -r ${DEST}/.emacs.d ${TMPDIR}/.emacs.d
+	mv ${DEST}/.emacs.d ${TMPDIR}/.
 fi
 
 cp -r ${CWD}/.emacs.d ${DEST}/.emacs.d
