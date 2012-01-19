@@ -242,3 +242,6 @@
 (global-linum-mode 1)
 ;; And line number formatting:
 (setq linum-format "%d ")
+
+; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
+(global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
