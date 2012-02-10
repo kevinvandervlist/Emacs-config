@@ -26,18 +26,20 @@
 (require 'org-install)
 ;; Coffee mode https://github.com/defunkt/coffee-mode
 (require 'coffee-mode)
+;; Auto-insert mode
+(require 'autoinsert)
 
 (custom-set-variables
-  ;; custom-set-variables was added by Custom.
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(inhibit-startup-screen t))
 (custom-set-faces
-  ;; custom-set-faces was added by Custom. Well sde
-  ;; If you edit it by hand, you could mess it up, so be careful.
-  ;; Your init file should contain only one such instance.
-  ;; If there is more than one, they won't work right.
+ ;; custom-set-faces was added by Custom. Well sde
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  )
 ;;Tab completion voor buffer switching. 
 (iswitchb-mode t)
@@ -63,18 +65,18 @@
 ;;Tab completion met ido in minibuffer
 (ido-mode t) ; for buffers and files
 (setq 
-  ido-ignore-buffers ;; ignore onderstaande buffers
-  '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
-  ido-work-directory-list '("~/")
-  ido-everywhere t                 ; Hoe meer hoe beter. 
-  ido-case-fold  t                 ; niet hoofdlettergevoelig met completion
-  ido-use-filename-at-point nil    ; don't use filename at point (annoying)
-  ido-use-url-at-point nil         ;  don't use url at point (annoying)
-  ido-enable-flex-matching t       ; be flexible
-  ido-max-prospects 4              ; don't spam my minibuffer
-  ido-confirm-unique-completion t) ; wait for RET, even with unique completion
-  ;; fix voor tab complete hierboven
-  (add-hook 'ido-setup-hook    
+ ido-ignore-buffers ;; ignore onderstaande buffers
+ '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
+ ido-work-directory-list '("~/")
+ ido-everywhere t                 ; Hoe meer hoe beter. 
+ ido-case-fold  t                 ; niet hoofdlettergevoelig met completion
+ ido-use-filename-at-point nil    ; don't use filename at point (annoying)
+ ido-use-url-at-point nil         ;  don't use url at point (annoying)
+ ido-enable-flex-matching t       ; be flexible
+ ido-max-prospects 4              ; don't spam my minibuffer
+ ido-confirm-unique-completion t) ; wait for RET, even with unique completion
+;; fix voor tab complete hierboven
+(add-hook 'ido-setup-hook    
           (lambda () 
             (define-key ido-completion-map [tab] 'ido-complete)))
 
@@ -89,22 +91,22 @@
 (setq make-backup-files nil)
 ;;Geen toolbar in windowed mode
 (if window-system
-	(tool-bar-mode 0))
+		(tool-bar-mode 0))
 ;;Geen menu bar
 (menu-bar-mode -1)
 ;;Fullscreen wanneer er op F11 gedrukt word. 
 (defun fullscreen ()
-    (interactive)
-    (set-frame-parameter nil 'fullscreen
-        (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
-            (global-set-key [f11] 'fullscreen)
+	(interactive)
+	(set-frame-parameter nil 'fullscreen
+											 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
+(global-set-key [f11] 'fullscreen)
 ;; Windows is anders dan Linux.
 (if (eq system-type 'windows-nt)
-	(global-set-key [f11] 'w32-fullscreen))
+		(global-set-key [f11] 'w32-fullscreen))
 
 ;;F9 voor de config file van emacs. 
 (global-set-key (kbd "<f9>") 
-  (lambda()(interactive)(find-file "~/.emacs")))
+								(lambda()(interactive)(find-file "~/.emacs")))
 ;;Parenthesis highlighting
 (show-paren-mode)
 ;;Scrollbar rechts houden. 
@@ -116,7 +118,7 @@
      (color-theme-initialize)
      (color-theme-hober)))
 
-;(load-file "~/.emacs.d/zenburn.el")
+																				;(load-file "~/.emacs.d/zenburn.el")
 (color-theme-zenburn)
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -203,9 +205,9 @@
 
 ;; Enable flyspell mode for certain modes
 (dolist (hook '(text-mode-hook))
-      (add-hook hook (lambda () (flyspell-mode 1))))
+	(add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(LaTeX-mode-hook))
-      (add-hook hook (lambda () (flyspell-mode 1))))
+	(add-hook hook (lambda () (flyspell-mode 1))))
 (setq-default ispell-program-name "aspell")
 
 ;; C-x C-b (switch buffer becomes recompile)
@@ -229,19 +231,106 @@
 (defun compilation-exit-autoclose (status code msg)
   ;; If M-x compile exists with a 0
   (when (and (eq status 'exit) (zerop code))
-	;; then bury the *compilation* buffer, so that C-x b doesn't go there
-	(bury-buffer)
-	;; and delete the *compilation* window
-	(delete-window (get-buffer-window (get-buffer "*compilation*"))))
+		;; then bury the *compilation* buffer, so that C-x b doesn't go there
+		(bury-buffer)
+		;; and delete the *compilation* window
+		(delete-window (get-buffer-window (get-buffer "*compilation*"))))
   ;; Always return the anticipated result of compilation-exit-message-function
   (cons msg code))
 ;; Specify my function (maybe I should have done a lambda function)
 (setq compilation-exit-message-function 'compilation-exit-autoclose)
 
 ;; Line numbering
-(global-linum-mode 1)
+																				;(global-linum-mode 1)
 ;; And line number formatting:
 (setq linum-format "%d ")
 
-; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
+																				; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
 (global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
+
+;; License templates
+(auto-insert-mode)
+(setq auto-insert-query nil)
+;; Very usefull completion of placeholders in files:
+;; http://www.emacswiki.org/emacs/AutoInsertMode
+(add-hook 'find-file-hooks 'auto-insert)
+(setq auto-insert-directory (concat (getenv "HOME") "/.emacs.d/templates/"))
+(setq auto-insert-alist
+			'(
+				("\\.h$" . ["h-template.h" auto-update-c-header-file])
+				("\\.c$" . ["c-template.c" auto-update-c-source-file])
+				("\\.java$" . ["java-template.java" auto-update-java-file])
+				))
+(setq auto-insert 'other)
+;; function replaces the string <ANSIFILENAME> by the current file
+;; name. You could use a similar approach to insert name and date into
+;; your file.
+
+(defun auto-update-c-source-file ()
+	(auto-update-header-name)
+	(auto-update-year)
+	)
+
+(defun auto-update-c-header-file ()
+	(auto-update-include-guard)
+	(auto-update-year)
+	)
+
+(defun auto-update-java-file ()
+	(auto-update-year)
+	(auto-update-class-name)
+	)
+
+(defun insert-today ()
+	"Insert today's date into buffer"
+	(interactive)
+	(insert (format-time-string "%Y"))
+	)
+
+(defun auto-update-header-name ()
+	(save-excursion
+		;; Replace <HEADER> with file name sans suffix
+		(while (search-forward "<HEADER>" nil t)
+			(save-restriction
+				(narrow-to-region (match-beginning 0) (match-end 0))
+				(replace-match (concat (file-name-sans-extension (file-name-nondirectory buffer-file-name)) ".h") t
+											 )
+				))
+		)
+	)
+
+(defun auto-update-class-name ()
+	(save-excursion
+		;; Replace <CLASSNAME> with file name sans suffix
+		(while (search-forward "<CLASSNAME>" nil t)
+			(save-restriction
+				(narrow-to-region (match-beginning 0) (match-end 0))
+				(replace-match (file-name-sans-extension (file-name-nondirectory buffer-file-name)) t
+											 )
+				))
+		)
+	)
+
+(defun auto-update-include-guard ()
+	(save-excursion
+		;; Replace ANSIFILENAME with file name
+		(while (search-forward "<ANSIFILENAME>" nil t)
+			(save-restriction
+				(narrow-to-region (match-beginning 0) (match-end 0))
+				(replace-match (upcase (file-name-nondirectory buffer-file-name)))
+				(subst-char-in-region (point-min) (point-max) ?. ?_)
+				))
+		)
+	)
+
+(defun auto-update-year ()
+	(save-excursion
+		;; replace YYYY with this year
+		(while (search-forward "<YYYY>" nil t)
+			(save-restriction
+				(narrow-to-region (match-beginning 0) (match-end 0))
+				(replace-match "")
+				(insert-today)
+				))
+		)
+	)
