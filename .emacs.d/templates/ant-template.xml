@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<project name="PROJECTNAME" basedir="." default="all">
+  <!-- Generic configuration options. -->
+  <property name="program.jar" value="${ant.project.name}.jar"/>
+  <property name="program.main" value="mainclass"/>
+  <property name="program.src.dir" value="src"/>
+
+  <!-- This probably doesnt need any changes... -->
+  <property name="program.build.dir" value="build/"/>
+  <property name="program.build.classes" value="${program.build.dir}classes/"/>
+  <property name="program.build.api" value="${program.build.dir}api/"/>
+  <property name="program.build.app" value="${program.build.dir}dist/"/>
+
+  <!-- Generic 'all' command. Prepares the app, and 'deploy' it. -->
+  <target name="all" depends="clean,jar" description="Compile and create jar, then cleanup">
+  </target>
+
+
+  <!-- Clean the temporary mess created by the ant script. -->
+  <target name="clean" description="Clean up the build system.">
+    <delete dir="${program.build.dir}"/>
+  </target>
+
+  <!-- Compile the sources. -->
+  <target name="compile" depends="clean" description="Compile the project">
+    <mkdir dir="${program.build.dir}"/>
+    <mkdir dir="${program.build.classes}"/>
+    <mkdir dir="${program.build.app}"/>
+    <mkdir dir="${program.build.api}"/>
+    <javac srcdir="${program.src.dir}" includeantruntime="false" destdir="${program.build.classes}">
+      <compilerarg value="-Xlint"/>
+    </javac>
+  </target>
+
+  <!-- Create the jar to run the program. -->
+  <target name="jar" depends="compile" description="Create a jar file from theproject.">
+    <jar destfile="${program.build.app}${program.jar}" basedir="${program.build.classes}">
+      <manifest>
+        <attribute name="Main-Class" value="${program.main}"/>
+      </manifest>
+    </jar>
+  </target>
+
+  <!-- Run the (compiled) application. -->
+  <target name="run" depends="jar" description="Run the program">
+    <java jar="${program.build.app}${program.jar}" fork="true"/>
+  </target>
+
+  <!-- Generate the javadoc. -->
+  <target name="javadoc" description="Create javadoc">
+    <javadoc sourcepath="${program.src.dir}" Splitindex="true" destdir="${program.build.api}"/>
+  </target>
+
+</project>

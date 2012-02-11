@@ -118,7 +118,6 @@
      (color-theme-initialize)
      (color-theme-hober)))
 
-																				;(load-file "~/.emacs.d/zenburn.el")
 (color-theme-zenburn)
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -241,11 +240,11 @@
 (setq compilation-exit-message-function 'compilation-exit-autoclose)
 
 ;; Line numbering
-																				;(global-linum-mode 1)
+;; (global-linum-mode 1)
 ;; And line number formatting:
 (setq linum-format "%d ")
 
-																				; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
+; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
 (global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
 
 ;; License templates
@@ -260,6 +259,7 @@
 				("\\.h$" . ["h-template.h" auto-update-c-header-file])
 				("\\.c$" . ["c-template.c" auto-update-c-source-file])
 				("\\.java$" . ["java-template.java" auto-update-java-file])
+				("build\.xml$" . ["ant-template.xml"])
 				))
 (setq auto-insert 'other)
 ;; function replaces the string <ANSIFILENAME> by the current file
@@ -268,24 +268,21 @@
 
 (defun auto-update-c-source-file ()
 	(auto-update-header-name)
-	(auto-update-year)
-	)
+	(auto-update-year))
 
 (defun auto-update-c-header-file ()
 	(auto-update-include-guard)
-	(auto-update-year)
-	)
+	(auto-update-year))
 
 (defun auto-update-java-file ()
 	(auto-update-year)
-	(auto-update-class-name)
-	)
+	(auto-update-class-name))
 
+;; Helper functions to replace macro's.
 (defun insert-today ()
 	"Insert today's date into buffer"
 	(interactive)
-	(insert (format-time-string "%Y"))
-	)
+	(insert (format-time-string "%Y")))
 
 (defun auto-update-header-name ()
 	(save-excursion
@@ -293,11 +290,7 @@
 		(while (search-forward "<HEADER>" nil t)
 			(save-restriction
 				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match (concat (file-name-sans-extension (file-name-nondirectory buffer-file-name)) ".h") t
-											 )
-				))
-		)
-	)
+				(replace-match (concat (file-name-sans-extension (file-name-nondirectory buffer-file-name)) ".h") t)))))
 
 (defun auto-update-class-name ()
 	(save-excursion
@@ -305,11 +298,7 @@
 		(while (search-forward "<CLASSNAME>" nil t)
 			(save-restriction
 				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match (file-name-sans-extension (file-name-nondirectory buffer-file-name)) t
-											 )
-				))
-		)
-	)
+				(replace-match (file-name-sans-extension (file-name-nondirectory buffer-file-name)) t )))))
 
 (defun auto-update-include-guard ()
 	(save-excursion
@@ -318,10 +307,7 @@
 			(save-restriction
 				(narrow-to-region (match-beginning 0) (match-end 0))
 				(replace-match (upcase (file-name-nondirectory buffer-file-name)))
-				(subst-char-in-region (point-min) (point-max) ?. ?_)
-				))
-		)
-	)
+				(subst-char-in-region (point-min) (point-max) ?. ?_)))))
 
 (defun auto-update-year ()
 	(save-excursion
@@ -330,7 +316,4 @@
 			(save-restriction
 				(narrow-to-region (match-beginning 0) (match-end 0))
 				(replace-match "")
-				(insert-today)
-				))
-		)
-	)
+				(insert-today)))))
