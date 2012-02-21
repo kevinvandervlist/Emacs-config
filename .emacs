@@ -244,7 +244,7 @@
 ;; And line number formatting:
 (setq linum-format "%d ")
 
-; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
+;; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
 (global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
 
 ;; License templates
@@ -259,6 +259,7 @@
 				("\\.h$" . ["h-template.h" auto-update-c-header-file])
 				("\\.c$" . ["c-template.c" auto-update-c-source-file])
 				("\\.java$" . ["java-template.java" auto-update-java-file])
+				("\\.py$" . ["python-template.py" auto-update-python-file])
 				("build\.xml$" . ["ant-template.xml"])
 				))
 (setq auto-insert 'other)
@@ -275,6 +276,10 @@
 	(auto-update-year))
 
 (defun auto-update-java-file ()
+	(auto-update-year)
+	(auto-update-class-name))
+
+(defun auto-update-python-file ()
 	(auto-update-year)
 	(auto-update-class-name))
 
