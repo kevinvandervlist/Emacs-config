@@ -1,5 +1,7 @@
 ;; Pad om extra spul te laden. 
 (add-to-list 'load-path "~/.emacs.d")
+;; Add rascal mode load path
+(add-to-list 'load-path "~/.emacs.d/rascal-emacs-mode")
 
 ;; Darkroom mode
 (require 'darkroom-mode)
@@ -28,6 +30,24 @@
 (require 'coffee-mode)
 ;; Auto-insert mode
 (require 'autoinsert)
+;; Pos-tip
+(require 'pos-tip)
+;; Autoload:
+(require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
+(ac-config-default)
+;; Always enable auto-complete-mode for certain modes:
+(add-to-list 'ac-modes 'rascal-mode)
+(add-to-list 'ac-modes 'php-mode)
+(add-to-list 'ac-modes 'coffee-mode)
+(add-to-list 'ac-modes 'c-mode)
+(add-to-list 'ac-modes 'java-mode)
+(add-to-list 'ac-modes 'python-mode)
+(add-to-list 'ac-modes 'latex-mode)
+
+;; Autoload rascal-mpl mode
+(setq auto-mode-alist (cons '("\.rsc" . rascal-mode) auto-mode-alist)) 
+(autoload 'rascal-mode "rascal-mode-cc" "mode for editing Rascal source files" t)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -43,9 +63,11 @@
  )
 ;;Tab completion voor buffer switching. 
 (iswitchb-mode t)
+
 ;;Ook tab completion in document ipv M-/. Altijd makkelijk. 
-;; Tab complete
-(global-set-key [(tab)] 'smart-tab)
+;; very interesting tab completion - but I don't use it anymore
+;(global-set-key [(tab)] 'smart-tab)
+
 (defun smart-tab ()
   "This smart tab is minibuffer compliant: it acts as usual in
     the minibuffer. Else, if mark is active, indents region. Else if
@@ -157,8 +179,8 @@
 ;; End daily overview
 
 ;; Default ispell taal - NL / EN_GB
-(setq ispell-dictionary "nederlands")
-;; (setq ispell-dictionary "british")
+;; (setq ispell-dictionary "nederlands")
+(setq ispell-dictionary "british")
 
 ;; Disable C-z
 (global-unset-key "\C-z")
