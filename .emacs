@@ -282,6 +282,7 @@
 				("\\.c$" . ["c-template.c" auto-update-c-source-file])
 				("\\.java$" . ["java-template.java" auto-update-java-file])
 				("\\.py$" . ["python-template.py" auto-update-python-file])
+				("\\.rsc$" . ["rascal-template.py" auto-update-rascal-file])
 				("build\.xml$" . ["ant-template.xml"])
 				))
 (setq auto-insert 'other)
@@ -303,6 +304,9 @@
 
 (defun auto-update-python-file ()
 	(auto-update-year)
+	(auto-update-class-name))
+
+(defun auto-update-rascal-file ()
 	(auto-update-class-name))
 
 ;; Helper functions to replace macro's.
