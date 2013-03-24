@@ -45,6 +45,10 @@
 (add-to-list 'ac-modes 'python-mode)
 (add-to-list 'ac-modes 'latex-mode)
 
+(autoload 'markdown-mode "markdown-mode"
+   "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 ;; Autoload rascal-mpl mode
 (setq auto-mode-alist (cons '("\.rsc" . rascal-mode) auto-mode-alist)) 
 (autoload 'rascal-mode "rascal-mode-cc" "mode for editing Rascal source files" t)
@@ -229,6 +233,8 @@
 	(add-hook hook (lambda () (flyspell-mode 1))))
 (dolist (hook '(LaTeX-mode-hook))
 	(add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(markdown-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode 1))))
 (setq-default ispell-program-name "aspell")
 
 ;; C-x C-b (switch buffer becomes recompile)
@@ -282,7 +288,7 @@
 				("\\.c$" . ["c-template.c" auto-update-c-source-file])
 				("\\.java$" . ["java-template.java" auto-update-java-file])
 				("\\.py$" . ["python-template.py" auto-update-python-file])
-				("\\.rsc$" . ["rascal-template.py" auto-update-rascal-file])
+				("\\.rsc$" . ["rascal-template.rsc" auto-update-rascal-file])
 				("build\.xml$" . ["ant-template.xml"])
 				))
 (setq auto-insert 'other)
