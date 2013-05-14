@@ -354,3 +354,10 @@
 				(narrow-to-region (match-beginning 0) (match-end 0))
 				(replace-match "")
 				(insert-today)))))
+
+(defun coffee-custom ()
+  "coffee-mode-hook"
+ (set (make-local-variable 'tab-width) 2))
+
+(add-hook 'coffee-mode-hook
+  '(lambda() (coffee-custom)))
