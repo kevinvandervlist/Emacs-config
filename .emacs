@@ -52,6 +52,16 @@
    "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+;; Enable js-mode autoatically 
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-hook 'js-mode-hook
+  (lambda ()
+    (make-variable-buffer-local 'tab-width)
+    (make-variable-buffer-local 'indent-tabs-mode)
+    (setq js-indent-level 2)
+    (setq tab-width 2)
+    (setq indent-tabs-mode nil)))
+
 ;; Autoload rascal-mpl mode
 (setq auto-mode-alist (cons '("\.rsc" . rascal-mode) auto-mode-alist)) 
 (autoload 'rascal-mode "rascal-mode-cc" "mode for editing Rascal source files" t)
