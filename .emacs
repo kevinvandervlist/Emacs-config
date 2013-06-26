@@ -30,6 +30,9 @@
 (require 'coffee-mode)
 ;; Auto-insert mode
 (require 'autoinsert)
+;; Indenting: visual cue
+(require 'indent-guide)
+(indent-guide-global-mode)
 ;; Pos-tip
 (require 'pos-tip)
 ;; Autoload:
