@@ -4,6 +4,7 @@
 (add-to-list 'load-path "~/.emacs.d/rascal-emacs-mode")
 
 ;; Darkroom mode
+(require 'go-mode)
 (require 'darkroom-mode)
 (require 'frame-local-vars)
 (require 'w32-fullscreen)
@@ -16,6 +17,8 @@
 (require 'color-theme)
 ;; Zenburn coloring
 (require 'zenburn)
+;Presentation(require 'high-contrast)
+; TODO: presentation increase font size (set-face-attribute 'default nil :height 150)
 ;; PHP-mode from ~/.emacs.d
 (require 'php-mode)
 ;; QL Mode
@@ -28,6 +31,9 @@
 (require 'org-install)
 ;; Coffee mode https://github.com/defunkt/coffee-mode
 (require 'coffee-mode)
+;; Rust mode
+(load-file "~/.emacs.d/rust-mode.el")
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 ;; Auto-insert mode
 (require 'autoinsert)
 ;; Indenting: visual cue
@@ -65,6 +71,8 @@
 ;; Autoload rascal-mpl mode
 (setq auto-mode-alist (cons '("\.rsc" . rascal-mode) auto-mode-alist)) 
 (autoload 'rascal-mode "rascal-mode-cc" "mode for editing Rascal source files" t)
+
+(setq-default indent-tabs-mode nil)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -150,6 +158,7 @@ point reaches the beginning or end of the buffer, stop there."
 (setq standard-indent 4)
 ;;Huidige regel highlighten. Niet meer ivm zenburn
 (global-hl-line-mode 1)
+;TODO: pres(global-hl-line-mode 0)
 ;;Andere kleurtjes
 (set-face-background 'hl-line "#353E35")
 (set-cursor-color "#353E35")
@@ -184,6 +193,7 @@ point reaches the beginning or end of the buffer, stop there."
      (color-theme-initialize)
      (color-theme-hober)))
 
+; TODO pres: disable for presentation mode
 (color-theme-zenburn)
 
 (add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
@@ -223,8 +233,8 @@ point reaches the beginning or end of the buffer, stop there."
 ;; End daily overview
 
 ;; Default ispell taal - NL / EN_GB
-;; (setq ispell-dictionary "nederlands")
-(setq ispell-dictionary "british")
+(setq ispell-dictionary "nl")
+;; (setq ispell-dictionary "british")
 
 ;; Disable C-z
 (global-unset-key "\C-z")
