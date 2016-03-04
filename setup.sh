@@ -20,8 +20,8 @@ if [ -d "${DEST}/.emacs.d" ]; then
 	mv ${DEST}/.emacs.d ${TMPDIR}/.
 fi
 
-cp -r ${CWD}/.emacs.d ${DEST}/.emacs.d
-cp ${CWD}/.emacs ${DEST}/.emacs
+ln -s ${CWD}/.emacs.d ${DEST}/.emacs.d
+ln -s ${CWD}/.emacs ${DEST}/.emacs
 
 echo "Copied files to ${DEST}/."
 echo "Backup is in ${TMPDIR}"
