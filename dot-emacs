@@ -1,172 +1,60 @@
-;; Pad om extra spul te laden. 
-(add-to-list 'load-path "~/.emacs.d")
-;; Add rascal mode load path
-(add-to-list 'load-path "~/.emacs.d/rascal-emacs-mode")
+;; our dot-emacs is a lisp file
+(add-to-list 'auto-mode-alist '("\\dot-emacs\\'" . emacs-lisp-mode))
 
-;; Darkroom mode
-(require 'go-mode)
-(require 'darkroom-mode)
-(require 'frame-local-vars)
-(require 'w32-fullscreen)
-;; ido mode
-(require 'ido) 
-;;Uber killring (browse-kill-ring package)
-(when (require 'browse-kill-ring nil 'noerror)
-  (browse-kill-ring-default-keybindings))
-;; Color theme base package
-(require 'color-theme)
-;; Zenburn coloring
-(require 'zenburn)
-;Presentation(require 'high-contrast)
-; TODO: presentation increase font size (set-face-attribute 'default nil :height 150)
-;; PHP-mode from ~/.emacs.d
-(require 'php-mode)
-;; QL Mode
-(load-file "~/.emacs.d/ql-mode.el")
-;; Rainbow mode
-(require 'rainbow-mode)
-;; Programmers dvorak
-(load-file "~/.emacs.d/programmer-dvorak.el")
-;; org-mode
-(require 'org-install)
-;; Coffee mode https://github.com/defunkt/coffee-mode
-(require 'coffee-mode)
-;; Rust mode
-(load-file "~/.emacs.d/rust-mode.el")
-(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
-;; Auto-insert mode
-(require 'autoinsert)
-;; Indenting: visual cue
-(require 'indent-guide)
-(indent-guide-global-mode)
-;; Pos-tip
-(require 'pos-tip)
-;; Autoload:
-(require 'auto-complete-config)
-(add-to-list 'ac-dictionary-directories "~/.emacs.d//ac-dict")
-(ac-config-default)
-;; Always enable auto-complete-mode for certain modes:
-(add-to-list 'ac-modes 'rascal-mode)
-(add-to-list 'ac-modes 'php-mode)
-(add-to-list 'ac-modes 'coffee-mode)
-(add-to-list 'ac-modes 'c-mode)
-(add-to-list 'ac-modes 'java-mode)
-(add-to-list 'ac-modes 'python-mode)
-(add-to-list 'ac-modes 'latex-mode)
+(global-set-key (kbd "<f9>") 
+(lambda()(interactive)(find-file "~/.emacs")))
 
-(autoload 'markdown-mode "markdown-mode"
-   "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;; Enable js-mode autoatically 
-(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
-(add-hook 'js-mode-hook
-  (lambda ()
-    (make-variable-buffer-local 'tab-width)
-    (make-variable-buffer-local 'indent-tabs-mode)
-    (setq js-indent-level 2)
-    (setq tab-width 2)
-    (setq indent-tabs-mode nil)))
-
-;; Autoload rascal-mpl mode
-(setq auto-mode-alist (cons '("\.rsc" . rascal-mode) auto-mode-alist)) 
-(autoload 'rascal-mode "rascal-mode-cc" "mode for editing Rascal source files" t)
-
-(setq-default indent-tabs-mode nil)
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(inhibit-startup-screen t))
-(custom-set-faces
- ;; custom-set-faces was added by Custom. Well sde
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
-;;Tab completion voor buffer switching. 
-(iswitchb-mode t)
-
-;;Ook tab completion in document ipv M-/. Altijd makkelijk. 
-;; very interesting tab completion - but I don't use it anymore
-;(global-set-key [(tab)] 'smart-tab)
-
-(defun smart-tab ()
-  "This smart tab is minibuffer compliant: it acts as usual in
-    the minibuffer. Else, if mark is active, indents region. Else if
-    point is at the end of a symbol, expands it. Else indents the
-    current line."
-  (interactive)
-  (if (minibufferp)
-      (unless (minibuffer-complete)
-        (dabbrev-expand nil))
-    (if mark-active
-        (indent-region (region-beginning)
-                       (region-end))
-      (if (looking-at "\\_>")
-          (dabbrev-expand nil)
-        (indent-for-tab-command)))))
-
-(defun smarter-move-beginning-of-line (arg)
-  "Move point back to indentation of beginning of line.
-
-Move point to the first non-whitespace character on this line.
-If point is already there, move to the beginning of the line.
-Effectively toggle between the first non-whitespace character and
-the beginning of the line.
-
-If ARG is not nil or 1, move forward ARG - 1 lines first.  If
-point reaches the beginning or end of the buffer, stop there."
-  (interactive "^p")
-  (setq arg (or arg 1))
-
-  ;; Move lines first
-  (when (/= arg 1)
-    (let ((line-move-visual nil))
-      (forward-line (1- arg))))
-
-  (let ((orig-point (point)))
-    (back-to-indentation)
-    (when (= orig-point (point))
-      (move-beginning-of-line 1))))
-
-;; remap C-a to 'smarter-move-beginning-of-line'
-(global-set-key [remap move-beginning-of-line]
-                'smarter-move-beginning-of-line)
-
-;;Tab completion met ido in minibuffer
-(ido-mode t) ; for buffers and files
-(setq 
- ido-ignore-buffers ;; ignore onderstaande buffers
- '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
- ido-work-directory-list '("~/")
- ido-everywhere t                 ; Hoe meer hoe beter. 
- ido-case-fold  t                 ; niet hoofdlettergevoelig met completion
- ido-use-filename-at-point nil    ; don't use filename at point (annoying)
- ido-use-url-at-point nil         ;  don't use url at point (annoying)
- ido-enable-flex-matching t       ; be flexible
- ido-max-prospects 4              ; don't spam my minibuffer
- ido-confirm-unique-completion t) ; wait for RET, even with unique completion
-;; fix voor tab complete hierboven
-(add-hook 'ido-setup-hook    
-          (lambda () 
-            (define-key ido-completion-map [tab] 'ido-complete)))
-
-;;Indent grootte
-(setq standard-indent 4)
-;;Huidige regel highlighten. Niet meer ivm zenburn
-(global-hl-line-mode 1)
-;TODO: pres(global-hl-line-mode 0)
-;;Andere kleurtjes
-(set-face-background 'hl-line "#353E35")
-(set-cursor-color "#353E35")
-;;Geen debiele backup files ($name~)
+;; No stupid backup files
 (setq make-backup-files nil)
+
+;; No welcome screen
+(custom-set-variables '(inhibit-startup-screen t))
+
+(setq package-list '(
+										 browse-kill-ring
+										 cl
+										 flymake-go
+										 go-autocomplete
+										 go-mode
+										 ido
+										 indent-guide
+										 markdown-mode
+										 rust-mode
+										 zenburn-theme
+										 ))
+
+;; Register package archives
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
+
+(package-initialize)
+
+;; fetch the list of packages available 
+(unless package-archive-contents
+  (package-refresh-contents))
+
+;; install the missing packages
+(dolist (package package-list)
+  (unless (package-installed-p package)
+    (package-install package)))
+
+;; Tab width
+(setq default-tab-width 2)
+;; Disable tab indenting
+(setq indent-tabs-mode nil)
+
+;; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
+(global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
+
+;; Graphical stuff
+(load-theme 'zenburn t)
+
+(show-paren-mode)
+(set-scroll-bar-mode 'right)
+(setq scroll-margin 3)
+
 ;;Geen toolbar in windowed mode
-(if window-system
-		(tool-bar-mode 0))
+(if window-system (tool-bar-mode 0))
 ;;Geen menu bar
 (menu-bar-mode -1)
 ;;Fullscreen wanneer er op F11 gedrukt word. 
@@ -175,92 +63,6 @@ point reaches the beginning or end of the buffer, stop there."
 	(set-frame-parameter nil 'fullscreen
 											 (if (frame-parameter nil 'fullscreen) nil 'fullboth)))
 (global-set-key [f11] 'fullscreen)
-;; Windows is anders dan Linux.
-(if (eq system-type 'windows-nt)
-		(global-set-key [f11] 'w32-fullscreen))
-
-;;F9 voor de config file van emacs. 
-(global-set-key (kbd "<f9>") 
-								(lambda()(interactive)(find-file "~/.emacs")))
-;;Parenthesis highlighting
-(show-paren-mode)
-;;Scrollbar rechts houden. 
-(set-scroll-bar-mode 'right)
-(setq scroll-margin 3)
-
-(eval-after-load "color-theme"
-  '(progn
-     (color-theme-initialize)
-     (color-theme-hober)))
-
-; TODO pres: disable for presentation mode
-(color-theme-zenburn)
-
-(add-to-list 'auto-mode-alist '("\\.org$" . org-mode))
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(setq org-log-done t)
-
-;; Day overview org-mode time tracking. - http://sachachua.com/blog/2007/12/clocking-time-with-emacs-org/
-(defun org-dblock-write:rangereport (params)
-  "Display day-by-day time reports."
-  (let* ((ts (plist-get params :tstart))
-         (te (plist-get params :tend))
-         (start (time-to-seconds
-                 (apply 'encode-time (org-parse-time-string ts))))
-         (end (time-to-seconds
-               (apply 'encode-time (org-parse-time-string te))))
-         day-numbers)
-    (setq params (plist-put params :tstart nil))
-    (setq params (plist-put params :end nil))
-    (while (<= start end)
-      (save-excursion
-        (insert "\n\n"
-                (format-time-string (car org-time-stamp-formats)
-                                    (seconds-to-time start))
-                "----------------\n")
-        (org-dblock-write:clocktable
-         (plist-put
-          (plist-put
-           params
-           :tstart
-           (format-time-string (car org-time-stamp-formats)
-                               (seconds-to-time start)))
-          :tend
-          (format-time-string (car org-time-stamp-formats)
-                              (seconds-to-time end))))
-        (setq start (+ 86400 start))))))
-;; End daily overview
-
-;; Default ispell taal - NL / EN_GB
-(setq ispell-dictionary "nl")
-;; (setq ispell-dictionary "british")
-
-;; Disable C-z
-(global-unset-key "\C-z")
-
-;; Programmers dvorak as default
-;;(defadvice switch-to-buffer (after activate-input-method activate)
-;;  (activate-input-method "programmer-dvorak"))
-
-;; Buffer resizing:
-(global-set-key (kbd "S-C-<left>") 'shrink-window-horizontally)
-(global-set-key (kbd "S-C-<right>") 'enlarge-window-horizontally)
-(global-set-key (kbd "S-C-<down>") 'shrink-window)
-(global-set-key (kbd "S-C-<up>") 'enlarge-window)
-
-;; Default tab width. per-buffer: M-x set-variable RET c-basic-offset RET x RET
-(setq default-tab-width 2)
-
-;; Ctrl needs to be at tab location
-;; Windows: Registry fix. Lame
-;; Unix: place below lines in .xmodmap; .xmodmap in ~/.bash_profile
-;; remove Lock = Caps_Lock
-;; remove Control = Control_L
-;; keysym Control_L = Caps_Lock
-;; keysym Caps_Lock = Control_L
-;; add Lock = Caps_Lock
-;; add Control = Control_L
 
 ;; And I prefer not to use Alt (SunOS anyone?)
 (global-set-key "\C-x\C-b" 'execute-extended-command)
@@ -271,40 +73,14 @@ point reaches the beginning or end of the buffer, stop there."
 ;; And kill-region to C-x-C-k
 (global-set-key "\C-x\C-k" 'kill-region)
 (global-set-key "\C-c\C-k" 'kill-region)
-;; Disable tab indenting
-(setq indent-tabs-mode nil)
 
 ;; isearch-forward and isearch-backward are great, but isearch-{forward,backward}-regexp is usefull to.
 (global-set-key "\M-s" 'isearch-forward-regexp)
 (global-set-key "\M-r" 'isearch-backward-regexp)
 
-;; Enable flyspell mode for certain modes
-(dolist (hook '(text-mode-hook))
-	(add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(LaTeX-mode-hook))
-	(add-hook hook (lambda () (flyspell-mode 1))))
-(dolist (hook '(markdown-mode-hook))
-	(add-hook hook (lambda () (flyspell-mode 1))))
-(setq-default ispell-program-name "aspell")
-
 ;; C-x C-b (switch buffer becomes recompile)
 (global-set-key "\C-x\C-m" 'recompile)
 
-;; Close the compilation window if there was no error at all.
-;; Reopens second buffer with prev
-;;(setq compilation-exit-message-function
-;;	  (lambda (status code msg)
-;;		;; If M-x compile exists with a 0
-;;		(when (and (eq status 'exit) (zerop code))
-;;		  ;; then bury the *compilation* buffer, so that C-x b doesn't go there
-;;		  (bury-buffer "*compilation*")
-;;		  ;; and return to whatever were looking at before
-;;		  (replace-buffer-in-windows "*compilation*"))
-;;		;; Always return the anticipated result of compilation-exit-message-function
-;;		(cons msg code)))
-
-;; Helper for compilation. Close the compilation window if
-;; there was no error at all.
 (defun compilation-exit-autoclose (status code msg)
   ;; If M-x compile exists with a 0
   (when (and (eq status 'exit) (zerop code))
@@ -317,97 +93,67 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Specify my function (maybe I should have done a lambda function)
 (setq compilation-exit-message-function 'compilation-exit-autoclose)
 
-;; Line numbering
-;; (global-linum-mode 1)
-;; And line number formatting:
-(setq linum-format "%d ")
+;;;;;;;; plugins
+;; Go golang
+;; Additional requirements: go get -u github.com/nsf/gocode
+(setq exec-path (append exec-path '("/home/kevin/go/bin")))
+(require 'cl)
+(require 'go-autocomplete)
+(require 'auto-complete-config)
+(require 'flymake-go)
+;; TODO
+;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(add-hook 'before-save-hook 'gofmt-before-save)
+(ac-config-default)
 
-;; whenever I do M-x revert-buffer I am annoyed by having to type 'yes'
-(global-set-key "\C-x\C-r" '(lambda() (interactive) (revert-buffer 1 1 1)))
+;; Rust mode
+(require 'rust-mode)
+(add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
-;; License templates
-(auto-insert-mode)
-(setq auto-insert-query nil)
-;; Very usefull completion of placeholders in files:
-;; http://www.emacswiki.org/emacs/AutoInsertMode
-(add-hook 'find-file-hooks 'auto-insert)
-(setq auto-insert-directory (concat (getenv "HOME") "/.emacs.d/templates/"))
-(setq auto-insert-alist
-			'(
-				("\\.h$" . ["h-template.h" auto-update-c-header-file])
-				("\\.c$" . ["c-template.c" auto-update-c-source-file])
-				("\\.java$" . ["java-template.java" auto-update-java-file])
-				("\\.py$" . ["python-template.py" auto-update-python-file])
-				("\\.rsc$" . ["rascal-template.rsc" auto-update-rascal-file])
-				("build\.xml$" . ["ant-template.xml"])
-				))
-(setq auto-insert 'other)
-;; function replaces the string <ANSIFILENAME> by the current file
-;; name. You could use a similar approach to insert name and date into
-;; your file.
+;; ido mode
+(require 'ido)
+;;Tab completion voor buffer switching. 
+(iswitchb-mode t)
+;;Tab completion met ido in minibuffer
+(ido-mode t) ;; for buffers and files
+(setq 
+ ido-ignore-buffers ;; ignore onderstaande buffers
+ '("\\` " "^\*Mess" "^\*Back" ".*Completion" "^\*Ido")
+ ido-work-directory-list '("~/")
+ ido-everywhere t                 ;; Hoe meer hoe beter. 
+ ido-case-fold  t                 ;; niet hoofdlettergevoelig met completion
+ ido-use-filename-at-point nil    ;; don't use filename at point (annoying)
+ ido-use-url-at-point nil         ;;  don't use url at point (annoying)
+ ido-enable-flex-matching t       ;; be flexible
+ ido-max-prospects 4              ;; don't spam my minibuffer
+ ido-confirm-unique-completion t) ;; wait for RET, even with unique completion
+;; fix voor tab complete hierboven
+(add-hook 'ido-setup-hook    
+          (lambda () 
+            (define-key ido-completion-map [tab] 'ido-complete)))
 
-(defun auto-update-c-source-file ()
-	(auto-update-header-name)
-	(auto-update-year))
+;;Indent grootte
+(setq standard-indent 2)
+;;Huidige regel highlighten. Niet meer ivm zenburn
+(global-hl-line-mode 1)
 
-(defun auto-update-c-header-file ()
-	(auto-update-include-guard)
-	(auto-update-year))
+;; kill ring
+(when (require 'browse-kill-ring nil 'noerror)
+  (browse-kill-ring-default-keybindings))
 
-(defun auto-update-java-file ()
-	(auto-update-year)
-	(auto-update-class-name))
+;; Indent guide:
+(require 'indent-guide)
 
-(defun auto-update-python-file ()
-	(auto-update-year)
-	(auto-update-class-name))
+;; Markdown 
+(autoload 'markdown-mode "markdown-mode" "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
-(defun auto-update-rascal-file ()
-	(auto-update-class-name))
-
-;; Helper functions to replace macro's.
-(defun insert-today ()
-	"Insert today's date into buffer"
-	(interactive)
-	(insert (format-time-string "%Y")))
-
-(defun auto-update-header-name ()
-	(save-excursion
-		;; Replace <HEADER> with file name sans suffix
-		(while (search-forward "<HEADER>" nil t)
-			(save-restriction
-				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match (concat (file-name-sans-extension (file-name-nondirectory buffer-file-name)) ".h") t)))))
-
-(defun auto-update-class-name ()
-	(save-excursion
-		;; Replace <CLASSNAME> with file name sans suffix
-		(while (search-forward "<CLASSNAME>" nil t)
-			(save-restriction
-				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match (file-name-sans-extension (file-name-nondirectory buffer-file-name)) t )))))
-
-(defun auto-update-include-guard ()
-	(save-excursion
-		;; Replace ANSIFILENAME with file name
-		(while (search-forward "<ANSIFILENAME>" nil t)
-			(save-restriction
-				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match (upcase (file-name-nondirectory buffer-file-name)))
-				(subst-char-in-region (point-min) (point-max) ?. ?_)))))
-
-(defun auto-update-year ()
-	(save-excursion
-		;; replace YYYY with this year
-		(while (search-forward "<YYYY>" nil t)
-			(save-restriction
-				(narrow-to-region (match-beginning 0) (match-end 0))
-				(replace-match "")
-				(insert-today)))))
-
-(defun coffee-custom ()
-  "coffee-mode-hook"
- (set (make-local-variable 'tab-width) 2))
-
-(add-hook 'coffee-mode-hook
-  '(lambda() (coffee-custom)))
+;; JavaScript
+(add-to-list 'auto-mode-alist '("\\.js$" . js-mode))
+(add-hook 'js-mode-hook
+  (lambda ()
+    (make-variable-buffer-local 'tab-width)
+    (make-variable-buffer-local 'indent-tabs-mode)
+    (setq js-indent-level 2)
+    (setq tab-width 2)
+    (setq indent-tabs-mode nil)))
