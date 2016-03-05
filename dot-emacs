@@ -13,6 +13,7 @@
 (setq package-list '(
 										 browse-kill-ring
 										 cl
+										 elm-mode
 										 flymake-go
 										 go-autocomplete
 										 go-mode
@@ -81,6 +82,9 @@
 ;; C-x C-b (switch buffer becomes recompile)
 (global-set-key "\C-x\C-m" 'recompile)
 
+;; Follow symlinks automatically
+(setq vc-follow-symlinks t)
+
 (defun compilation-exit-autoclose (status code msg)
   ;; If M-x compile exists with a 0
   (when (and (eq status 'exit) (zerop code))
@@ -106,14 +110,25 @@
 (add-hook 'before-save-hook 'gofmt-before-save)
 (ac-config-default)
 
+;; elm-mode
+(require 'elm-mode)
+
+;; Flyspell
+(dolist (hook '(text-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(LaTeX-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(markdown-mode-hook))
+	(add-hook hook (lambda () (flyspell-mode 1))))
+(setq-default ispell-program-name "aspell")
+(setq ispell-dictionary "nl")
+
 ;; Rust mode
 (require 'rust-mode)
 (add-to-list 'auto-mode-alist '("\\.rs\\'" . rust-mode))
 
 ;; ido mode
 (require 'ido)
-;;Tab completion voor buffer switching. 
-(iswitchb-mode t)
 ;;Tab completion met ido in minibuffer
 (ido-mode t) ;; for buffers and files
 (setq 
