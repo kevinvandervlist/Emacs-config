@@ -1,8 +1,24 @@
 ;; our dot-emacs is a lisp file
 (add-to-list 'auto-mode-alist '("\\dot-emacs\\'" . emacs-lisp-mode))
 
+;; Start with a custom default window size.
+(when window-system (set-frame-size (selected-frame) 200 60))
+
+;; Presentation mode settings
+(global-set-key (kbd "<f12>") 
+								(lambda()
+									(interactive)
+									(set-face-attribute 'default nil :height 240)
+									(load-theme 'leuven t)
+								))
+
+;; dot-emacs file
 (global-set-key (kbd "<f9>") 
-(lambda()(interactive)(find-file "~/.emacs")))
+								(lambda()(interactive)(find-file "~/.emacs")))
+
+;; neotree file listing
+(global-set-key (kbd "<f8>") 
+								(lambda()(interactive)(neotree-toggle)))
 
 ;; No stupid backup files
 (setq make-backup-files nil)
@@ -10,16 +26,58 @@
 ;; No welcome screen
 (custom-set-variables '(inhibit-startup-screen t))
 
+;; And disable the audible bell
+(setq ring-bell-function 'ignore)
+
+;; Smarter tab completion
+(setq tab-always-indent 'complete)
+
+;; And smarter start of line -- http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
+(defun smarter-move-beginning-of-line (arg)
+  "Move point back to indentation of beginning of line.
+
+Move point to the first non-whitespace character on this line.
+If point is already there, move to the beginning of the line.
+Effectively toggle between the first non-whitespace character and
+the beginning of the line.
+
+If ARG is not nil or 1, move forward ARG - 1 lines first.  If
+point reaches the beginning or end of the buffer, stop there."
+  (interactive "^p")
+  (setq arg (or arg 1))
+
+  ;; Move lines first
+  (when (/= arg 1)
+    (let ((line-move-visual nil))
+      (forward-line (1- arg))))
+
+  (let ((orig-point (point)))
+    (back-to-indentation)
+    (when (= orig-point (point))
+      (move-beginning-of-line 1))))
+
+;; remap C-a to `smarter-move-beginning-of-line'
+(global-set-key [remap move-beginning-of-line]
+                'smarter-move-beginning-of-line)
+
+;; Enable avy
+(global-set-key (kbd "M-g w") 'avy-goto-word-or-subword-1)
+
+;; Updating packages: M-x package-list-packages, type U (mark Upgradable packages) and then x (eXecute the installs and deletions). Then y (confirm deletion)
 (setq package-list '(
+										 avy
 										 browse-kill-ring
 										 cl
 										 elm-mode
 										 flymake-go
+										 find-file-in-project
 										 go-autocomplete
 										 go-mode
 										 ido
 										 indent-guide
+										 leuven-theme
 										 markdown-mode
+										 neotree
 										 rust-mode
 										 zenburn-theme
 										 ))
@@ -106,9 +164,27 @@
 (require 'auto-complete-config)
 (require 'flymake-go)
 ;; TODO
-;(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+(define-key ac-mode-map (kbd "M-TAB") 'auto-complete)
+
 (add-hook 'before-save-hook 'gofmt-before-save)
 (ac-config-default)
+
+;; file tree
+(require 'find-file-in-project)
+(require 'neotree)
+(setq neo-smart-open t)
+(defun neotree-project-dir ()
+  "Open NeoTree using the git root."
+  (interactive)
+  (let ((project-dir (ffip-project-root))
+        (file-name (buffer-file-name)))
+    (if project-dir
+        (progn
+          (neotree-dir project-dir)
+          (neotree-find file-name))
+      (message "Could not find git project root."))))
+
+;;(define-key map (kbd "C-c C-p") 'neotree-project-dir)
 
 ;; elm-mode
 (require 'elm-mode)
