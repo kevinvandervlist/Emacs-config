@@ -4,21 +4,33 @@
 ;; Start with a custom default window size.
 (when window-system (set-frame-size (selected-frame) 200 60))
 
-;; Presentation mode settings
-(global-set-key (kbd "<f12>") 
-								(lambda()
-									(interactive)
-									(set-face-attribute 'default nil :height 240)
-									(load-theme 'leuven t)
-								))
+;; Presentation mode settings -- disabled by default
+(defvar presentation-mode-enabled nil)
+;;(defun toggle-presentation-mode () (print 'abc))
+(defun toggle-presentation-mode () "toggle between presentation and normal mode"
+			 (interactive)
+			 (setq presentation-mode-enabled
+						 (if presentation-mode-enabled
+								 (progn
+									 (message "Disabling presentation mode")
+									 (set-face-attribute 'default nil :height 100)
+									 (load-theme 'zenburn t)
+									 (when window-system (set-frame-size (selected-frame) 200 60))
+									 nil)
+							 (progn
+								 (message "Enabling presentation mode")
+								 (set-face-attribute 'default nil :height 240)
+								 (load-theme 'leuven t)
+								 t))))
+
+(global-set-key (kbd "<f12>") 'toggle-presentation-mode)
 
 ;; dot-emacs file
 (global-set-key (kbd "<f9>") 
 								(lambda()(interactive)(find-file "~/.emacs")))
 
 ;; neotree file listing
-(global-set-key (kbd "<f8>") 
-								(lambda()(interactive)(neotree-toggle)))
+(global-set-key (kbd "<f8>") 'neotree-toggle)
 
 ;; Don't ask what to do with active processes -- kill them anyway.
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
