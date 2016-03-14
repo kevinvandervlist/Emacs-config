@@ -4,6 +4,11 @@
 ;; Start with a custom default window size.
 (when window-system (set-frame-size (selected-frame) 200 60))
 
+;; And set a custom window title
+(setq frame-title-format
+  '("emacs - " (buffer-file-name "%f"
+    (dired-directory dired-directory "%b"))))
+
 ;; Presentation mode settings -- disabled by default
 (defvar presentation-mode-enabled nil)
 ;;(defun toggle-presentation-mode () (print 'abc))
