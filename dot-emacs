@@ -105,6 +105,7 @@ point reaches the beginning or end of the buffer, stop there."
 										 rust-mode
 										 tide
 										 web-mode
+										 yaml-mode
 										 zenburn-theme
 										 ))
 
@@ -185,6 +186,10 @@ point reaches the beginning or end of the buffer, stop there."
 
 ;; Company mode
 (add-hook 'after-init-hook 'global-company-mode)
+
+;; Yaml
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml$" . yaml-mode))
 
 ;; Go golang
 ;; Additional requirements: go get -u github.com/nsf/gocode
