@@ -83,7 +83,8 @@ point reaches the beginning or end of the buffer, stop there."
                 'smarter-move-beginning-of-line)
 
 ;; Enable avy
-(global-set-key (kbd "M-g w") 'avy-goto-word-or-subword-1)
+;;(global-set-key (kbd "M-g w") 'avy-goto-word-or-subword-1)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
 
 ;; Updating packages: M-x package-list-packages, type U (mark Upgradable packages) and then x (eXecute the installs and deletions). Then y (confirm deletion)
 (setq package-list '(
@@ -164,26 +165,44 @@ point reaches the beginning or end of the buffer, stop there."
 (global-set-key "\M-s" 'isearch-forward-regexp)
 (global-set-key "\M-r" 'isearch-backward-regexp)
 
-;; C-x C-b (switch buffer becomes recompile)
 (global-set-key "\C-x\C-m" 'recompile)
+
+;; Default compile command make -k is useless -- set it to empty because of tdd.el
+(setq compile-command "")
 
 ;; Follow symlinks automatically
 (setq vc-follow-symlinks t)
 
-(defun compilation-exit-autoclose (status code msg)
-  ;; If M-x compile exists with a 0
-  (when (and (eq status 'exit) (zerop code))
-		;; then bury the *compilation* buffer, so that C-x b doesn't go there
-		(bury-buffer)
-		;; and delete the *compilation* window
-		(delete-window (get-buffer-window (get-buffer "*compilation*"))))
-  ;; Always return the anticipated result of compilation-exit-message-function
-  (cons msg code))
-;; Specify my function (maybe I should have done a lambda function)
-(setq compilation-exit-message-function 'compilation-exit-autoclose)
+;; (defun compilation-exit-autoclose (status code msg)
+;;   ;; If M-x compile exists with a 0
+;;   (when (and (eq status 'exit) (zerop code))
+;; 		;; then bury the *compilation* buffer, so that C-x b doesn't go there
+;; 		(bury-buffer)
+;; 		;; and delete the *compilation* window
+;; 		(delete-window (get-buffer-window (get-buffer "*compilation*"))))
+;;   ;; Always return the anticipated result of compilation-exit-message-function
+;;   (cons msg code))
+;; ;; Specify my function (maybe I should have done a lambda function)
+;; (setq compilation-exit-message-function 'compilation-exit-autoclose)
+
+;; Close the compilation window if there was no error at all.
+(setq compilation-exit-message-function
+			(lambda (status code msg)
+				;; If M-x compile exists with a 0
+				(when (and (eq status 'exit) (zerop code))
+					;; then bury the *compilation* buffer, so that C-x b doesn't go there
+					(bury-buffer "*compilation*")
+					;; and return to whatever were looking at before
+					(replace-buffer-in-windows "*compilation*"))
+				;; Always return the anticipated result of compilation-exit-message-function
+				(cons msg code)))
 
 ;;;;;;;; plugins
 
+;; TDD-related
+(load-file "~/.emacs.d/tdd.el")
+(add-hook 'after-init-hook 'tdd-mode)
+ 
 ;; Company mode
 (add-hook 'after-init-hook 'global-company-mode)
 
