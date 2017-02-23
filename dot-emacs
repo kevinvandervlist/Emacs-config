@@ -1,6 +1,9 @@
 ;; our dot-emacs is a lisp file
 (add-to-list 'auto-mode-alist '("\\dot-emacs\\'" . emacs-lisp-mode))
 
+;; Show column
+(setq column-number-mode t)
+
 ;; Start with a custom default window size.
 (when window-system (set-frame-size (selected-frame) 200 60))
 
@@ -53,7 +56,15 @@
 (setq make-backup-files nil)
 
 ;; No welcome screen
-(custom-set-variables '(inhibit-startup-screen t))
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(inhibit-startup-screen t)
+ '(package-selected-packages
+	 (quote
+		(haskell-mode paredit cider markdown-preview-mode zenburn-theme yaml-mode web-mode tide tdd-status-mode-line swiper solarized-theme rust-mode neotree markdown-mode leuven-theme json-mode indent-guide go-mode go-autocomplete flymake-yaml flymake-go find-file-in-project elm-mode company browse-kill-ring avy))))
 
 ;; And disable the audible bell
 (setq ring-bell-function 'ignore)
@@ -97,6 +108,7 @@ point reaches the beginning or end of the buffer, stop there."
 (setq package-list '(
 										 avy
 										 browse-kill-ring
+										 cider
 										 cl
 										 company
 										 elm-mode
@@ -104,12 +116,15 @@ point reaches the beginning or end of the buffer, stop there."
 										 find-file-in-project
 										 go-autocomplete
 										 go-mode
+										 haskell-mode
 										 ido
 										 indent-guide
 										 json-mode
 										 leuven-theme
 										 markdown-mode
+										 markdown-preview-mode
 										 neotree
+										 paredit
 										 rust-mode
 										 tide
 										 web-mode
@@ -146,6 +161,12 @@ point reaches the beginning or end of the buffer, stop there."
 (show-paren-mode)
 (set-scroll-bar-mode 'right)
 (setq scroll-margin 3)
+
+;; cider (clojure)
+;; starting the repl: C-c M-j || connecting: C-c M-c
+;; Paredit-mode cheat sheet https://emacswiki.org/emacs/PareditCheatsheet
+(autoload 'enable-paredit-mode "paredit" "Turn on pseudo-structural editing of Lisp code." t)
+(add-hook 'clojure-mode-hook #'enable-paredit-mode)
 
 ;;Geen toolbar in windowed mode
 (if window-system (tool-bar-mode 0))
@@ -344,3 +365,9 @@ point reaches the beginning or end of the buffer, stop there."
     (setq js-indent-level 2)
     (setq tab-width 2)
     (setq indent-tabs-mode nil)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
