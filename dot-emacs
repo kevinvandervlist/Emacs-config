@@ -64,7 +64,7 @@
  '(inhibit-startup-screen t)
  '(package-selected-packages
 	 (quote
-		(haskell-mode paredit cider markdown-preview-mode zenburn-theme yaml-mode web-mode tide tdd-status-mode-line swiper solarized-theme rust-mode neotree markdown-mode leuven-theme json-mode indent-guide go-mode go-autocomplete flymake-yaml flymake-go find-file-in-project elm-mode company browse-kill-ring avy))))
+		(magit haskell-mode paredit cider markdown-preview-mode zenburn-theme yaml-mode web-mode tide tdd-status-mode-line swiper solarized-theme rust-mode neotree markdown-mode leuven-theme json-mode indent-guide go-mode go-autocomplete flymake-yaml flymake-go find-file-in-project elm-mode company browse-kill-ring avy))))
 
 ;; And disable the audible bell
 (setq ring-bell-function 'ignore)
@@ -121,6 +121,7 @@ point reaches the beginning or end of the buffer, stop there."
 										 indent-guide
 										 json-mode
 										 leuven-theme
+										 magit
 										 markdown-mode
 										 markdown-preview-mode
 										 neotree
@@ -371,3 +372,4 @@ point reaches the beginning or end of the buffer, stop there."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+

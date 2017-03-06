@@ -1,0 +1,37 @@
+;; really minimal emacs config for git commit messages. Export EDITOR=env
+;; EDITOR='emacs -nw --no-init-file --no-site-file --load ~/.emacs.d/.emacs.minimal'
+
+(setq-default fill-column 79)
+
+;; fill-column-indicator.el
+(load-file "~/.emacs.d/fill-column-indicator.el")
+;; (setq-default fci-mode t)
+;; fci-rule-column
+(define-globalized-minor-mode global-fci-mode fci-mode
+    (lambda () (fci-mode 1)))
+
+(global-fci-mode 1)
+;; for git commit first line
+(setq fci-rule-column 50)
+
+;; Show line sizes
+(setq column-number-mode t)
+
+;; (add-hook 'text-mode-hook 'turn-on-auto-fill)
+(setq-default auto-fill-function 'do-auto-fill)
+
+; F12 toggles auto-fill mode
+(global-set-key [f12] 'auto-fill-mode)
+
+; C-- keybinding for undo (removes the shift)
+(global-set-key [(control -)] 'undo)
+
+; turn on pending delete (when a region
+; is selected, typing replaces it)
+(delete-selection-mode t)
+
+; when on a tab, make the cursor the tab length
+(setq-default x-stretch-cursor t)
+
+; avoid garbage collection (default is only 400k)
+(setq-default gc-cons-threshold 4000000)
