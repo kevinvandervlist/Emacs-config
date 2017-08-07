@@ -72,6 +72,9 @@
 ;; Smarter tab completion
 (setq tab-always-indent 'complete)
 
+;; Company mode dabbrev should not downcase by default (in text mode)
+(setq company-dabbrev-downcase nil)
+
 ;; And smarter start of line -- http://emacsredux.com/blog/2013/05/22/smarter-navigation-to-the-beginning-of-a-line/
 (defun smarter-move-beginning-of-line (arg)
   "Move point back to indentation of beginning of line.
