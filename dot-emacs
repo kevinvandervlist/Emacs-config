@@ -382,6 +382,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;; key bindings for sane mac bindings
 (when (eq system-type 'darwin)
   ;; not sure yet
-  (setq mac-option-modifier 'alt)
+  (setq mac-option-modifier 'meta)
   (setq mac-command-modifier 'control)
   )
