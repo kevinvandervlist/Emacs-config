@@ -2,7 +2,7 @@
 if [ $# -ne 1 ]; then
 	echo "Copy the emacs config to a certain directory."
 	echo "The old emacs config is backed up."
-	echo "Usage: `basename $0` /path/to/dest."
+	echo "Usage: `basename $0` /home/kevin"
 	exit 1
 fi
 
