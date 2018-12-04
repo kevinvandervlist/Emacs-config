@@ -119,6 +119,7 @@ point reaches the beginning or end of the buffer, stop there."
 										 cl
 										 company
 										 elm-mode
+                                                                                 exec-path-from-shell
 										 flymake-go
 										 find-file-in-project
 										 go-autocomplete
@@ -146,6 +147,10 @@ point reaches the beginning or end of the buffer, stop there."
                          ("melpa" . "https://melpa.org/packages/")))
 
 (package-initialize)
+
+;; On a mac, fix the path...
+(when (memq window-system '(mac ns x))
+  (exec-path-from-shell-initialize))
 
 ;; fetch the list of packages available 
 (unless package-archive-contents
