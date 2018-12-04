@@ -61,10 +61,14 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(haskell-process-auto-import-loaded-modules t)
+ '(haskell-process-log t)
+ '(haskell-process-suggest-remove-import-lines t)
+ '(haskell-process-type (quote stack-ghci))
  '(inhibit-startup-screen t)
  '(package-selected-packages
-	 (quote
-		(magit haskell-mode paredit cider markdown-preview-mode zenburn-theme yaml-mode web-mode tide tdd-status-mode-line swiper solarized-theme rust-mode neotree markdown-mode leuven-theme json-mode indent-guide go-mode go-autocomplete flymake-yaml flymake-go find-file-in-project elm-mode company browse-kill-ring avy))))
+   (quote
+    (magit haskell-mode paredit cider markdown-preview-mode zenburn-theme yaml-mode web-mode tide tdd-status-mode-line swiper solarized-theme rust-mode neotree markdown-mode leuven-theme json-mode indent-guide go-mode go-autocomplete flymake-yaml flymake-go find-file-in-project elm-mode company browse-kill-ring avy))))
 
 ;; And disable the audible bell
 (setq ring-bell-function 'ignore)
@@ -130,6 +134,7 @@ point reaches the beginning or end of the buffer, stop there."
 										 neotree
 										 paredit
 										 rust-mode
+                                                                                 scala-mode
 										 tide
 										 web-mode
 										 yaml-mode
@@ -379,9 +384,28 @@ point reaches the beginning or end of the buffer, stop there."
  ;; If there is more than one, they won't work right.
  )
 
+;; Flix
+(load-file "$HOME/.emacs.d/flix-mode.el")
+(add-to-list 'auto-mode-alist '("\\.flix\\'" . flix-mode))
+
+;; Haskell
+(add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
+;; Work with stack ghci
+
+
+(eval-after-load 'haskell-mode '(progn
+  (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
+  (define-key haskell-mode-map (kbd "C-c C-z") 'haskell-interactive-switch)
+  (define-key haskell-mode-map (kbd "C-c C-n C-t") 'haskell-process-do-type)
+  (define-key haskell-mode-map (kbd "C-c C-n C-i") 'haskell-process-do-info)))
+
+(add-hook 'haskell-mode-hook 'interactive-haskell-mode)
+
 ;; key bindings for sane mac bindings
 (when (eq system-type 'darwin)
   ;; not sure yet
   (setq mac-option-modifier 'meta)
   (setq mac-command-modifier 'control)
+  (setenv "PATH" "/usr/local/bin:/bin:/usr/bin")
+  (setq exec-path (split-string (getenv "PATH") path-separator))
   )
