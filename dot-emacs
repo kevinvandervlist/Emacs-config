@@ -50,7 +50,7 @@
 ;; Don't ask what to do with active processes -- kill them anyway.
 (defadvice save-buffers-kill-emacs (around no-query-kill-emacs activate)
 	"Prevent annoying \"Active processes exist\" query when you quit Emacs."
-	(flet ((process-list ())) ad-do-it))
+	(flet (process-list) ad-do-it))
 
 ;; No stupid backup files
 (setq make-backup-files nil)
@@ -116,7 +116,6 @@ point reaches the beginning or end of the buffer, stop there."
 										 avy
 										 browse-kill-ring
 										 cider
-										 cl
 										 company
 										 elm-mode
                                                                                  exec-path-from-shell
@@ -256,7 +255,6 @@ point reaches the beginning or end of the buffer, stop there."
 ;; Go golang
 ;; Additional requirements: go get -u github.com/nsf/gocode
 (setq exec-path (append exec-path '("/home/kevin/go/bin")))
-(require 'cl)
 (require 'go-autocomplete)
 (require 'auto-complete-config)
 (require 'flymake-go)
@@ -397,6 +395,8 @@ point reaches the beginning or end of the buffer, stop there."
 (add-hook 'haskell-mode-hook 'haskell-auto-insert-module-template)
 ;; Work with stack ghci
 
+;; Auto reload documents in doc view by default
+(add-hook 'doc-view-mode-hook 'auto-revert-mode)
 
 (eval-after-load 'haskell-mode '(progn
   (define-key haskell-mode-map (kbd "C-c C-l") 'haskell-process-load-or-reload)
